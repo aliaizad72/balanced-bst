@@ -16,6 +16,31 @@ class Node
   def <=>(other)
     value <=> other.value
   end
+
+  def count_children
+    if left.nil? && right.nil?
+      0
+    elsif left && right
+      2
+    else
+      1
+    end
+  end
+
+  def children_of?(parent_node)
+    parent_node.left == left || parent_node.right == right
+  end
+
+  def left_of?(parent_node)
+    return false unless children_of?(parent_node)
+
+    case parent_node.count_children
+    when 1
+      !parent_node.left.nil?
+    when 2
+      parent_node.left == self
+    end
+  end
 end
 
 # The Balanced Binary Search Tree
@@ -62,13 +87,37 @@ class Tree
     end
   end
 
-  def find(value, node = @root)
+  def find(value, node = @root, parent_node = nil)
     if value == node.value
-      node
+      [node, parent_node] # returns the node & porent
     elsif value > node.value
-      find(value, node.right)
+      find(value, node.right, node)
     elsif value < node.value
-      find(value, node.left)
+      find(value, node.left, node)
+    end
+  end
+
+  def find_node(value)
+    find(value)[0]
+  end
+
+  def find_parent_of(value)
+    find(value)[1]
+  end
+
+  def delete(node)
+    to_delete = find_node(node)
+    parent_of_to_delete = find_parent_of(node)
+
+    case to_delete.count_children
+    when 0
+      if to_delete.left_of?(parent_of_to_delete)
+        parent_of_to_delete.left = nil
+      else
+        parent_of_to_delete.right = nil
+      end
+    when 1
+    else 2
     end
   end
 
@@ -80,3 +129,6 @@ class Tree
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
+tree.pretty_print
+tree.delete(3)
+tree.pretty_print
