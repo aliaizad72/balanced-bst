@@ -4,17 +4,12 @@ require('./merge_sort.rb')
 
 # Nodes of the Tree
 class Node
-  include Comparable
   attr_accessor :value, :left, :right
 
   def initialize(value)
     @value = value
     @left = nil
     @right = nil
-  end
-
-  def <=>(other)
-    value <=> other.value
   end
 
   def count_children
@@ -28,7 +23,7 @@ class Node
   end
 
   def children_of?(parent_node)
-    parent_node.left == left || parent_node.right == right
+    parent_node.right.value == value || parent_node.left.value == value
   end
 
   def left_of?(parent_node)
@@ -117,6 +112,17 @@ class Tree
         parent_of_to_delete.right = nil
       end
     when 1
+      child = if to_delete.left.nil?
+                to_delete.right
+              else
+                to_delete.left
+              end
+
+      if to_delete.left_of?(parent_of_to_delete)
+        parent_of_to_delete.left = child
+      else
+        parent_of_to_delete.right = child
+      end
     else 2
     end
   end
@@ -130,5 +136,5 @@ end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
 tree.pretty_print
-tree.delete(3)
+tree.delete(1)
 tree.pretty_print
