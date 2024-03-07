@@ -44,19 +44,31 @@ class Tree
     root
   end
 
-  def insert(node = @root, new_node)
+  def insert(new_node, node = @root)
     if new_node < node.value
       if node.left.nil?
         node.left = Node.new(new_node)
         return
       end
-      insert(node.left, new_node)
+      insert(new_node, node.left)
     elsif new_node > node.value
       if node.right.nil?
         node.right = Node.new(new_node)
         return
       end
-      insert(node.right, new_node)
+      insert(new_node, node.right)
+    elsif new_node == node.value
+      'Value already exist in Tree!'
+    end
+  end
+
+  def find(value, node = @root)
+    if value == node.value
+      node
+    elsif value > node.value
+      find(value, node.right)
+    elsif value < node.value
+      find(value, node.left)
     end
   end
 
@@ -68,6 +80,3 @@ class Tree
 end
 
 tree = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
-tree.insert(20)
-tree.insert(24)
-tree.pretty_print
