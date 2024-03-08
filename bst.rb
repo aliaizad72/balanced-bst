@@ -188,7 +188,32 @@ class Tree
     block.call(queue.shift.key)
     recursive_level_order(queue, &block)
   end
+
+  def inorder(node = @root, &block)
+    return if node.nil?
+
+    inorder(node.left, &block)
+    block.call(node.key)
+    inorder(node.right, &block)
+  end
+
+  def preorder(node = @root, &block)
+    return if node.nil?
+
+    block.call(node.key)
+    preorder(node.left, &block)
+    preorder(node.right, &block)
+  end
+
+  def postorder(node = @root, &block)
+    return if node.nil?
+
+    postorder(node.left, &block)
+    postorder(node.right, &block)
+    block.call(node.key)
+  end
 end
 
 tree = Tree.new([56, 99, 12, 77, 42, 68, 86, 92, 81, 18, 24, 60, 6, 64, 80, 35, 5, 44, 51, 79])
 tree.pretty_print
+tree.postorder { |n| p n}
