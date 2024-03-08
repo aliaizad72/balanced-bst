@@ -166,9 +166,29 @@ class Tree
       successor.left.parent = successor
     end
   end
+
+  def level_order
+    queue = []
+    queue.push(@root)
+
+    until queue.empty?
+      current_node = queue[0]
+      queue.push(current_node.left) unless current_node.left.nil?
+      queue.push(current_node.right) unless current_node.right.nil?
+      yield queue.shift.key
+    end
+  end
+
+  def recursive_level_order(queue = [@root], &block)
+    return if queue.empty?
+
+    current_node = queue[0]
+    queue.push(current_node.left) unless current_node.left.nil?
+    queue.push(current_node.right) unless current_node.right.nil?
+    block.call(queue.shift.key)
+    recursive_level_order(queue, &block)
+  end
 end
 
 tree = Tree.new([56, 99, 12, 77, 42, 68, 86, 92, 81, 18, 24, 60, 6, 64, 80, 35, 5, 44, 51, 79])
-tree.pretty_print
-tree.delete(79)
 tree.pretty_print
