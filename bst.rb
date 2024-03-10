@@ -252,9 +252,3 @@ class Tree
     @root = build_tree(array)
   end
 end
-
-tree = Tree.new([56, 99, 12, 77, 42])
-tree.insert(100)
-tree.insert(210)
-tree.insert(187)
-tree.pretty_print
