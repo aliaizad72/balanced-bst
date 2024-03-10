@@ -132,6 +132,8 @@ class Tree
     else
       trailing_pointer.right = node
     end
+
+    rebalance unless balanced?
   end
 
   def transplant(to_be_replaced, replacement)
@@ -241,7 +243,18 @@ class Tree
     diff = (height(node.left) - height(node.right)).abs
     diff <= 1
   end
+
+  def rebalance
+    return if balanced?
+
+    array = []
+    inorder { |key| array.push(key) }
+    @root = build_tree(array)
+  end
 end
 
 tree = Tree.new([56, 99, 12, 77, 42])
-p tree.balanced?
+tree.insert(100)
+tree.insert(210)
+tree.insert(187)
+tree.pretty_print
