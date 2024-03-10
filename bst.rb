@@ -43,13 +43,13 @@ class Tree
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 
-  def search(node = @root, key)
-    if node == nil || node.key == key
+  def search(key, node = @root)
+    if node.nil? || node.key == key
       node
     elsif key < node.key
-      search(node.left, key)
+      search(key, node.left)
     else
-      search(node.right, key)
+      search(key, node.right)
     end
   end
 
@@ -212,8 +212,18 @@ class Tree
     postorder(node.right, &block)
     block.call(node.key)
   end
+
+  def height(node = @root)
+    node = search(node) if node.is_a? Integer
+
+    return 0 if node.nil?
+
+    return 1 if node.right.nil? && node.left.nil?
+
+    [height(node.left), height(node.right)].max + 1
+  end
 end
 
-tree = Tree.new([56, 99, 12, 77, 42, 68, 86, 92, 81, 18, 24, 60, 6, 64, 80, 35, 5, 44, 51, 79])
+tree = Tree.new([56, 99, 12, 77, 42])
 tree.pretty_print
-tree.postorder { |n| p n}
+p tree.height(12)
