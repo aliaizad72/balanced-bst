@@ -236,8 +236,12 @@ class Tree
     end
     d
   end
+
+  def balanced?(node = @root)
+    diff = (height(node.left) - height(node.right)).abs
+    diff <= 1
+  end
 end
 
 tree = Tree.new([56, 99, 12, 77, 42])
-tree.pretty_print
-p tree.depth(99)
+p tree.balanced?
