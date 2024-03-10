@@ -222,8 +222,22 @@ class Tree
 
     [height(node.left), height(node.right)].max + 1
   end
+
+  def depth(node = @root)
+    node = search(node) if node.is_a? Integer
+    return 0 if node.parent.nil?
+
+    pointer = node.parent
+    d = 0
+
+    until pointer.nil?
+      pointer = pointer.parent
+      d += 1
+    end
+    d
+  end
 end
 
 tree = Tree.new([56, 99, 12, 77, 42])
 tree.pretty_print
-p tree.height(12)
+p tree.depth(99)
